@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.urls import reverse
 from taxi.models import Manufacturer, Driver, Car
 
 
@@ -74,3 +75,13 @@ class CarModelTests(TestCase):
         )
         self.car.drivers.add(self.driver, driver2)
         self.assertEqual(self.car.drivers.count(), 2)
+
+        # Тест на правильність URL для водія
+
+        def test_driver_get_absolute_url(self):
+            driver = Driver.objects.create_user(
+                username="johndoe", password="testpass", license_number="AB12345"
+            )
+            expected_url = reverse("taxi:driver-detail", kwargs={"pk": driver.pk})
+            self.assertEqual(driver.get_absolute_url(), expected_url)
+
